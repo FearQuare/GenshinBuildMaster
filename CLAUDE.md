@@ -24,13 +24,18 @@ This is a Genshin Impact character-building web app. Users record the characters
 npm run db:up        # start Postgres (docker compose); Docker Desktop must be running
 npm run db:migrate   # prisma migrate dev; pass `-- --name <name>` for a new migration
 npm run db:seed      # upsert data/characters.json + the local user (idempotent)
-npm run dev          # http://localhost:3000 → redirects to /characters
+npm run dev          # http://localhost:3000 (landing page; roster at /characters)
 npm run lint
 npm run typecheck    # next typegen && tsc (typegen provides globals like LayoutProps)
 npm run build
 ```
 
 There is no test runner yet.
+
+### Testing on a phone
+
+- Open the Mac's LAN IP on port 3000, for example `http://192.168.1.121:3000`.
+- `allowedDevOrigins: ["192.168.*.*"]` in `next.config.ts` lets those devices load the dev JavaScript and hot reload. Without it, Next.js blocks them.
 
 ## Architecture
 
@@ -61,5 +66,9 @@ There is no test runner yet.
 - Colors are Tailwind tokens in `src/app/globals.css` (`bg-panel`, `text-text-strong`, `text-muted`, `border-line`, `bg-accent`, plus element and rarity colors). Use the tokens, not raw hex values.
 - `globals.css` also holds the CSS-only glitch kit: `glitch-red`, `glitch-cyan`, `glitch-slice`, `boot-in` (stagger it via `--i`), `caret` and `jolt`. It animates only transform and opacity, and turns off under reduced motion.
 - `src/app/layout.tsx` renders the shared `SiteNav` and `SiteFooter` (`src/components/`). To add a nav section, add it to `LINKS` in `site-nav.tsx`.
+- **iOS Safari 26 top bar:** Safari fills the area behind its translucent top bar with the `background-color` of the full-width fixed or sticky element at the top edge. It ignores `theme-color` and doesn't paint pseudo-elements there.
+  - Keep the navbar opaque, with no `backdrop-filter`, spanning the full width.
+  - Keep the navbar above every other fixed layer. The `body::after` scanline overlay uses `--z-scanlines`, which sits below `--z-sticky`.
+  - Breaking any of these brings back scrolled content showing above the navbar on iPhones.
 - The landing page (`src/app/page.tsx`) features Sandrone. Her artwork lives in `public/featured/`; `sandrone-mask.png` is a smaller copy used for the red and cyan glitch silhouettes.
 - The `hallmark` design skill lives in `.agents/skills/hallmark` and is symlinked into `.claude/skills/`. It records its design choices in `.hallmark/log.json`. Skills are managed with `npx skills add`, and versions are pinned in `skills-lock.json`.
