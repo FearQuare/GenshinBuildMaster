@@ -49,6 +49,7 @@
   --dur-long: 420ms;
   --color-scanline: rgb(255 0 0 / 0.045);
   --color-glow: rgb(255 0 0 / 0.14);
+  --z-scanlines: 50; /* below the navbar so Safari samples the navbar, not the overlay */
   --z-sticky: 100;
   --z-overlay: 200;
 }
@@ -56,6 +57,17 @@
 html,
 body {
   overflow-x: clip;
+}
+
+/* Paints Safari's overscroll / rubber-band areas so no white flashes past the edges. */
+html {
+  background-color: var(--color-bg);
+}
+
+/* Landscape on notched iPhones: keep content clear of the notch (viewport-fit=cover). */
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 body {
@@ -66,12 +78,12 @@ body {
   font-family: var(--font-sans), ui-monospace, monospace;
 }
 
-/* CRT scanlines over the whole page. Static; never animated. */
+/* CRT scanlines over the page content. Static; never animated. */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: var(--z-overlay);
+  z-index: var(--z-scanlines);
   pointer-events: none;
   background: repeating-linear-gradient(
     to bottom,

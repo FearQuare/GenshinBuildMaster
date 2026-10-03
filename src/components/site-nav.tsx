@@ -13,7 +13,10 @@ export function SiteNav() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-(--z-sticky) border-b border-line bg-bg/90 backdrop-blur-sm">
+    // Safari 26 paints the strip behind its translucent top bar with the background-color
+    // of the full-width fixed/sticky element at the top edge. Keep this header opaque,
+    // edge to edge, and above every other fixed layer so Safari samples it.
+    <header className="sticky top-0 z-(--z-sticky) border-b border-line bg-bg pt-[env(safe-area-inset-top)]">
       <nav
         aria-label="Main"
         className="mx-auto flex h-14 w-full max-w-7xl items-center gap-6 px-4 sm:px-6"
