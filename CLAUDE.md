@@ -38,7 +38,10 @@ There is no test runner yet.
   - Static game data, such as `Character`, is seeded from JSON in `data/`. It is keyed by readable slug IDs (for example `hu-tao`).
   - Per-user data lives in join models, such as `UserCharacter` (a composite key of `userId` + `characterId`). Per-user progress (level, constellation and so on) will be added to these models.
   - Weapons, artifacts and teams should follow the same split.
-- **To add newly released characters,** append them to `data/characters.json` and re-run `npm run db:seed`. The Traveler is deliberately left out because their element varies.
+- **To add newly released characters,** append them to `data/characters.json` and re-run `npm run db:seed`.
+  - The list is complete through version 7.1.
+  - The Traveler is stored as one row per element (`traveler-anemo` … `traveler-cryo`), named "Lumine (<Element>)" by default.
+  - Manekin/Manekina (the Miliastra Wonderland avatars) are deliberately left out.
 - **No auth yet.** `src/lib/current-user.ts` (`getCurrentUserId`) returns the seeded `local-user`. It's the only place that knows about the placeholder user. Server actions and pages must get the user from it, so auth can replace it later in one place.
 - **Data flow:**
   - Server components query Prisma through `src/lib/db.ts`, a singleton client.
