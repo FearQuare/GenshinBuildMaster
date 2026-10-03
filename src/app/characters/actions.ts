@@ -20,5 +20,5 @@ export async function setOwned(characterId: string, owned: boolean) {
     await db.userCharacter.deleteMany({ where: { userId, characterId } });
   }
 
-  revalidatePath("/characters");
+  revalidatePath("/", "layout");
 }

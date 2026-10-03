@@ -42,6 +42,10 @@ There is no test runner yet.
   - The list is complete through version 7.1.
   - The Traveler is stored as one row per element (`traveler-anemo` … `traveler-cryo`), named "Lumine (<Element>)" by default.
   - Manekin/Manekina (the Miliastra Wonderland avatars) are deliberately left out.
+- **Character icons** are committed in `public/characters/<id>.png`. All Traveler elements share `traveler.png` (Lumine).
+  - `npm run icons:fetch` downloads any missing icons from Project Amber (gi.yatta.moe), matching characters by name. Pass `-- --force` to re-download them all.
+  - Run it after adding new characters to `data/characters.json`.
+  - Build an icon's path with `characterIconSrc(id)` from `src/lib/character-icon.ts`.
 - **No auth yet.** `src/lib/current-user.ts` (`getCurrentUserId`) returns the seeded `local-user`. It's the only place that knows about the placeholder user. Server actions and pages must get the user from it, so auth can replace it later in one place.
 - **Data flow:**
   - Server components query Prisma through `src/lib/db.ts`, a singleton client.
@@ -50,6 +54,12 @@ There is no test runner yet.
 
 ## Design
 
-- `DESIGN.md` is the project's locked design system: dark palette, `#FFB38A` primary, Inter + JetBrains Mono, 8px radii.
-- Its colors are Tailwind theme tokens in `src/app/globals.css` (`bg-surface`, `text-muted`, `border-border`, `text-primary`, plus the element colors `--color-pyro` etc.). Use the tokens instead of raw hex values in components.
-- The `hallmark` design skill is installed in `.agents/skills/hallmark` and symlinked into `.claude/skills/`. Skills are managed with `npx skills add`, and versions are pinned in `skills-lock.json`.
+- `DESIGN.md` is the project's locked design system: the "Glitch UI Dystopian Terminal" look.
+  - Colors: black `#050000`, red text `#FF5050`, red accent `#FF0000`, cyan `#00FFFF` for glitch effects.
+  - Fonts: Share Tech, with JetBrains Mono for data.
+  - Effects: scanlines and HUD details.
+- Colors are Tailwind tokens in `src/app/globals.css` (`bg-panel`, `text-text-strong`, `text-muted`, `border-line`, `bg-accent`, plus element and rarity colors). Use the tokens, not raw hex values.
+- `globals.css` also holds the CSS-only glitch kit: `glitch-red`, `glitch-cyan`, `glitch-slice`, `boot-in` (stagger it via `--i`), `caret` and `jolt`. It animates only transform and opacity, and turns off under reduced motion.
+- `src/app/layout.tsx` renders the shared `SiteNav` and `SiteFooter` (`src/components/`). To add a nav section, add it to `LINKS` in `site-nav.tsx`.
+- The landing page (`src/app/page.tsx`) features Sandrone. Her artwork lives in `public/featured/`; `sandrone-mask.png` is a smaller copy used for the red and cyan glitch silhouettes.
+- The `hallmark` design skill lives in `.agents/skills/hallmark` and is symlinked into `.claude/skills/`. It records its design choices in `.hallmark/log.json`. Skills are managed with `npx skills add`, and versions are pinned in `skills-lock.json`.

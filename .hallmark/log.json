@@ -1,0 +1,24 @@
+[
+  {
+    "date": "2026-10-03",
+    "scope": "app",
+    "macrostructure": "Split Studio (landing) + Catalogue (characters)",
+    "theme": "DESIGN.md (Glitch UI Dystopian Terminal)",
+    "genre": "atmospheric",
+    "enrichment": "Sandrone splash art with CSS chromatic-split + slice glitch",
+    "nav": "N8 terminal",
+    "footer": "Ft4 dense colophon",
+    "brief": "Genshin Build Master \u00b7 navbar, Sandrone landing, characters page restyle"
+  },
+  {
+    "date": "2026-10-03",
+    "scope": "app",
+    "macrostructure": "Catalogue",
+    "theme": "DESIGN.md (Premium Digital Studio)",
+    "genre": "atmospheric",
+    "enrichment": "none",
+    "nav": "N9 edge-aligned",
+    "footer": "Ft2 inline single line",
+    "brief": "Genshin Build Master \u00b7 character roster redesign, fixed-height cards"
+  }
+]

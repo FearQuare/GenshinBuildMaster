@@ -18,7 +18,8 @@ export default async function CharactersPage() {
   ]);
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+    <main className="mx-auto w-full max-w-7xl px-4 pt-8 pb-16 sm:px-6 sm:pt-10">
+      <h1 className="sr-only">Characters</h1>
       <CharacterGrid
         characters={characters}
         ownedIds={owned.map((o) => o.characterId)}

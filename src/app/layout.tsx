@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Share_Tech } from "next/font/google";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteNav } from "@/components/site-nav";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const shareTech = Share_Tech({
+  variable: "--font-share-tech",
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -14,16 +17,20 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Genshin Build Master",
-  description: "Track your Genshin Impact characters and plan builds.",
+  description: "Track the Genshin Impact characters you own and plan their builds.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${shareTech.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <SiteNav />
+        <div className="flex flex-1 flex-col">{children}</div>
+        <SiteFooter />
+      </body>
     </html>
   );
 }
