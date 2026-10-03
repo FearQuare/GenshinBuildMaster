@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Element {
+  PYRO
+  HYDRO
+  ANEMO
+  ELECTRO
+  DENDRO
+  CRYO
+  GEO
+}
+
+enum WeaponType {
+  SWORD
+  CLAYMORE
+  POLEARM
+  BOW
+  CATALYST
+}
+
+// Static game data, loaded from data/characters.json by prisma/seed.ts.
+model Character {
+  id         String          @id // slug, e.g. "hu-tao"
+  name       String
+  element    Element
+  weaponType WeaponType
+  rarity     Int
+  owners     UserCharacter[]
+}
+
+model User {
+  id         String          @id @default(cuid())
+  name       String
+  characters UserCharacter[]
+}
+
+// A character a user owns. Per-user progress (level, constellation, talents) goes here later.
+model UserCharacter {
+  userId      String
+  characterId String
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  character   Character @relation(fields: [characterId], references: [id])
+
+  @@id([userId, characterId])
+}

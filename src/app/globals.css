@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+/* Palette from DESIGN.md. Element colours are tuned for the dark background. */
+@theme inline {
+  --color-bg: #1c222e;
+  --color-surface: #18181b;
+  --color-border: #27272a;
+  --color-text: #ffffff;
+  --color-muted: #a1a1aa;
+  --color-primary: #ffb38a;
+  --color-accent: #b2451e;
+
+  --color-pyro: #f2805a;
+  --color-hydro: #4cc2f1;
+  --color-anemo: #6fd6b5;
+  --color-electro: #b98cf2;
+  --color-dendro: #9bcb4a;
+  --color-cryo: #9fd6e3;
+  --color-geo: #f0c24b;
+
+  --color-rarity-5: #e8b04b;
+  --color-rarity-4: #a98be0;
+
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+
+  --radius-card: 8px;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
