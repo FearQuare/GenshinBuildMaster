@@ -175,7 +175,12 @@ export async function getConnection(): Promise<Connection | null> {
 }
 
 export async function clearSessionCookie(): Promise<void> {
-  (await cookies()).delete(COOKIE_NAME);
+  try {
+    (await cookies()).delete(COOKIE_NAME);
+  } catch {
+    // Pages (Server Components) can't change cookies. The session itself is already
+    // deleted, so the leftover cookie points at nothing and reads as signed out.
+  }
 }
 
 async function deleteCurrentSession(): Promise<void> {

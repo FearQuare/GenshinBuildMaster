@@ -61,6 +61,10 @@ npm test             # node:test via tsx; files are src/**/*.test.ts
   - Credentials (`ltuid_v2`/`ltoken_v2`) come from the user, never from env. They live server-side behind an httpOnly `hoyolab_session` cookie: in memory by default, or in the `HoyolabSession` table with "Remember me". The ltoken is encrypted there with `HOYOLAB_SESSION_KEY` from `.env`. Never log the ltoken or put it in a URL or error message.
   - The roster is cached for 1 hour and details for 10 minutes, both in memory. Calls are throttled to one per second per HoYoLAB login. `x-rpc-device_id` is stored in the `AppSetting` table.
   - Character ids are HoYoLAB's numeric ids (e.g. `10000046`), not our slugs. `src/lib/hoyolab/match.ts` maps them to our slugs by name; the Traveler maps by element. Sign-in and the menu's "Sync characters" tick the account's characters (add-only).
+- **Character Details** (`/character-details/[character]`, signed-in only) shows a character's current build from HoYoLAB.
+  - The layout holds the sidebar, built from HoYoLAB's roster. `[character]` is our slug, or the HoYoLAB id when there's no match. `loading.tsx` shows while a build loads.
+  - Derived numbers (set bonuses, crit value, combat talents) live in `src/lib/hoyolab/build.ts`.
+  - **Download PNG** calls `/api/hoyolab/characters/[id]/card`, which renders `src/lib/card/character-card-image.tsx` with `next/og` (Satori). It supports flexbox and inline styles only, and crashes on `undefined` style values. Its colors are hex copies of the tokens. The fonts are TTFs in `assets/fonts/` (OFL).
 
 ## Design
 

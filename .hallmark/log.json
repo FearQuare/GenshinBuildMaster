@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-10-14",
+    "scope": "page",
+    "macrostructure": "Workbench (sidebar list + detail)",
+    "theme": "DESIGN.md (Glitch UI Dystopian Terminal)",
+    "genre": "atmospheric",
+    "enrichment": "splash art with HUD corners + element glow, glitch name, numbered panels, PNG build card",
+    "nav": "N8 terminal; links move to a second row below 640px",
+    "footer": "Ft4 dense colophon",
+    "brief": "Genshin Build Master \u00b7 Character Details page with downloadable build card"
+  },
+  {
     "date": "2026-10-13",
     "scope": "component",
     "macrostructure": "Catalogue (characters) + Split Studio (landing), unchanged",

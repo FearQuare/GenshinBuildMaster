@@ -5,21 +5,12 @@ import { useMemo, useState } from "react";
 import type { Character } from "@/generated/prisma/client";
 import { Element, WeaponType } from "@/generated/prisma/enums";
 import { characterIconSrc } from "@/lib/character-icon";
+import { ELEMENT_COLOR } from "@/lib/elements";
 import type { OwnedEntry } from "@/lib/roster-file";
 import { useRoster } from "@/lib/use-roster";
 import { RosterFileTools } from "./roster-file-tools";
 
 type Ownership = "all" | "owned" | "missing";
-
-const ELEMENT_COLOR: Record<Element, string> = {
-  PYRO: "var(--color-pyro)",
-  HYDRO: "var(--color-hydro)",
-  ANEMO: "var(--color-anemo)",
-  ELECTRO: "var(--color-electro)",
-  DENDRO: "var(--color-dendro)",
-  CRYO: "var(--color-cryo)",
-  GEO: "var(--color-geo)",
-};
 
 const OWNERSHIP_OPTIONS: { value: Ownership; label: string }[] = [
   { value: "all", label: "All" },

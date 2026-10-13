@@ -13,20 +13,29 @@ function normalize(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
+// Builds a function that returns our slug for a HoYoLAB character, or null.
+export function slugMatcher(ours: OurCharacter[]) {
+  const byName = new Map(ours.map((c) => [normalize(c.name), c.id]));
+  const ourIds = new Set(ours.map((c) => c.id));
+  return (character: Pick<CharacterSummary, "id" | "name" | "element">): string | null => {
+    const id = TRAVELER_IDS.has(character.id)
+      ? character.element && `traveler-${character.element.toLowerCase()}`
+      : byName.get(normalize(character.name));
+    return id && ourIds.has(id) ? id : null;
+  };
+}
+
 export function matchCharacters(
   roster: CharacterSummary[],
   ours: OurCharacter[],
 ): { ids: string[]; unmatched: string[] } {
-  const byName = new Map(ours.map((c) => [normalize(c.name), c.id]));
-  const ourIds = new Set(ours.map((c) => c.id));
+  const slugFor = slugMatcher(ours);
   const ids = new Set<string>();
   const unmatched: string[] = [];
 
   for (const character of roster) {
-    const id = TRAVELER_IDS.has(character.id)
-      ? character.element && `traveler-${character.element.toLowerCase()}`
-      : byName.get(normalize(character.name));
-    if (id && ourIds.has(id)) ids.add(id);
+    const id = slugFor(character);
+    if (id) ids.add(id);
     else unmatched.push(character.name);
   }
   return { ids: [...ids], unmatched };

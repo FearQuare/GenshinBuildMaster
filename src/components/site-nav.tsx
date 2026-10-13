@@ -9,6 +9,7 @@ import { DataSync } from "./data-sync";
 const LINKS = [
   { href: "/", label: "Home" },
   { href: "/characters", label: "Characters" },
+  { href: "/character-details", label: "Character Details" },
 ] as const;
 
 // `account` is the signed-in HoYoLAB account (from the root layout), or null for guests.
@@ -22,26 +23,28 @@ export function SiteNav({ account }: { account: GenshinAccount | null }) {
     <header className="sticky top-0 z-(--z-sticky) border-b border-line bg-bg pt-[env(safe-area-inset-top)]">
       <nav
         aria-label="Main"
-        className="relative mx-auto flex h-14 w-full max-w-7xl items-center gap-3 px-4 sm:gap-6 sm:px-6"
+        // Phones: logo + Data Sync on the first row, the links in a scrollable second row.
+        className="relative mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-6 px-4 sm:flex-nowrap sm:px-6"
       >
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2 whitespace-nowrap font-mono text-sm font-semibold text-text-strong focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus"
+          className="flex h-14 shrink-0 items-center gap-2 whitespace-nowrap font-mono text-sm font-semibold text-text-strong focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus"
         >
           <span aria-hidden className="text-accent">&gt;</span>
           GBM
           <span className="sr-only">Genshin Build Master, home</span>
         </Link>
 
-        <ul className="flex items-center sm:gap-2">
+        <ul className="order-last -mx-4 flex w-[calc(100%+2rem)] items-center overflow-x-auto border-t border-line px-2 sm:order-none sm:mx-0 sm:w-auto sm:gap-2 sm:overflow-visible sm:border-t-0 sm:px-0">
           {LINKS.map(({ href, label }) => {
-            const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+            const active =
+              href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
             return (
               <li key={href}>
                 <Link
                   href={href}
                   aria-current={active ? "page" : undefined}
-                  className={`relative flex h-14 items-center whitespace-nowrap px-2 text-base sm:px-3 transition-colors duration-(--dur-micro) focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-focus ${
+                  className={`relative flex h-11 items-center whitespace-nowrap px-2 text-base sm:h-14 sm:px-3 transition-colors duration-(--dur-micro) focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-focus ${
                     active ? "text-text-strong" : "text-muted hover:text-text"
                   }`}
                 >

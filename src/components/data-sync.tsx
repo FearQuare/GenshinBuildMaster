@@ -200,7 +200,7 @@ function SyncButton() {
           id={panelId}
           role="dialog"
           aria-label="Data Sync"
-          className="boot-in absolute inset-x-0 top-full max-h-[calc(100dvh-4rem-env(safe-area-inset-top))] overflow-y-auto border-b border-accent bg-bg sm:inset-x-auto sm:right-6 sm:mt-2 sm:w-[27rem] sm:rounded-card sm:border"
+          className="boot-in absolute inset-x-0 top-full max-h-[calc(100dvh-7rem-env(safe-area-inset-top))] sm:max-h-[calc(100dvh-4.5rem-env(safe-area-inset-top))] overflow-y-auto border-b border-accent bg-bg sm:inset-x-auto sm:right-6 sm:mt-2 sm:w-[27rem] sm:rounded-card sm:border"
         >
           <PanelHeader onClose={close} closeDisabled={busy} />
           <div className="p-4 sm:p-5">
