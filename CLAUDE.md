@@ -28,9 +28,8 @@ npm run dev          # http://localhost:3000 (landing page; roster at /character
 npm run lint
 npm run typecheck    # next typegen && tsc (typegen provides globals like LayoutProps)
 npm run build
+npm test             # node:test via tsx; files are src/**/*.test.ts
 ```
-
-There is no test runner yet.
 
 ### Testing on a phone
 
@@ -51,11 +50,17 @@ There is no test runner yet.
   - `npm run icons:fetch` downloads any missing icons from Project Amber (gi.yatta.moe), matching characters by name. Pass `-- --force` to re-download them all.
   - Run it after adding new characters to `data/characters.json`.
   - Build an icon's path with `characterIconSrc(id)` from `src/lib/character-icon.ts`.
-- **No auth yet.** `src/lib/current-user.ts` (`getCurrentUserId`) returns the seeded `local-user`. It's the only place that knows about the placeholder user. Server actions and pages must get the user from it, so auth can replace it later in one place.
+- **Users and sign-in.** Users are HoYoLAB accounts (`User.hoyolabUid`). Signing in = "Data Sync" in the navbar (`src/components/data-sync.tsx`): credentials → profile card → "Yes, that's me". `getCurrentUserId()` in `src/lib/current-user.ts` reads the session and returns `null` for guests. Pages and server actions must get the user only from it.
+- **Guests** use the app fully without signing in. Their roster lives in local storage (`src/lib/guest-roster.ts`). It can be exported and imported as JSON (`src/lib/roster-file.ts`, toolbar on `/characters`). On sign-in it is merged into the account and cleared. Client components use `useRoster(serverOwned)` (`src/lib/use-roster.ts`), where `serverOwned` is `null` for guests, so both modes share one API.
 - **Data flow:**
   - Server components query Prisma through `src/lib/db.ts`, a singleton client.
-  - Pages call `await connection()` so they render per request instead of being prerendered at build time. Cache Components is not enabled.
+  - Pages call `await connection()` so they render per request instead of being prerendered at build time. The root layout also reads the session cookie for the navbar. Cache Components is not enabled.
   - Mutations are server actions (e.g. `src/app/characters/actions.ts`) that call `revalidatePath`. Client components apply them optimistically with `useOptimistic`.
+- **HoYoLAB integration** (`src/lib/hoyolab/`, routes under `src/app/api/hoyolab/`). It powers sign-in and reads the user's data from HoYoLAB's Battle Chronicle API. The characters routes have no UI yet.
+  - Routes: `GET|POST|DELETE /api/hoyolab/connection` (status, sign in, sign out), `POST /api/hoyolab/connection/test` (profile card: account + `genshin/api/index` stats), `GET /api/hoyolab/characters`, `GET /api/hoyolab/characters/[id]` and `POST /api/hoyolab/characters/sync`. Errors are `{ error: { code, message, retcode? } }`. The UI switches on `code`.
+  - Credentials (`ltuid_v2`/`ltoken_v2`) come from the user, never from env. They live server-side behind an httpOnly `hoyolab_session` cookie: in memory by default, or in the `HoyolabSession` table with "Remember me". The ltoken is encrypted there with `HOYOLAB_SESSION_KEY` from `.env`. Never log the ltoken or put it in a URL or error message.
+  - The roster is cached for 1 hour and details for 10 minutes, both in memory. Calls are throttled to one per second per HoYoLAB login. `x-rpc-device_id` is stored in the `AppSetting` table.
+  - Character ids are HoYoLAB's numeric ids (e.g. `10000046`), not our slugs. `src/lib/hoyolab/match.ts` maps them to our slugs by name; the Traveler maps by element. Sign-in and the menu's "Sync characters" tick the account's characters (add-only).
 
 ## Design
 
@@ -64,7 +69,7 @@ There is no test runner yet.
   - Fonts: Share Tech, with JetBrains Mono for data.
   - Effects: scanlines and HUD details.
 - Colors are Tailwind tokens in `src/app/globals.css` (`bg-panel`, `text-text-strong`, `text-muted`, `border-line`, `bg-accent`, plus element and rarity colors). Use the tokens, not raw hex values.
-- `globals.css` also holds the CSS-only glitch kit: `glitch-red`, `glitch-cyan`, `glitch-slice`, `boot-in` (stagger it via `--i`), `caret` and `jolt`. It animates only transform and opacity, and turns off under reduced motion.
+- `globals.css` also holds the CSS-only glitch kit: `glitch-red`, `glitch-cyan`, `glitch-slice`, `boot-in` (stagger it via `--i`), `caret`, `jolt` and `skeleton` (loading shimmer). It animates only transform and opacity, and turns off under reduced motion.
 - `src/app/layout.tsx` renders the shared `SiteNav` and `SiteFooter` (`src/components/`). To add a nav section, add it to `LINKS` in `site-nav.tsx`.
 - **iOS Safari 26 top bar:** Safari fills the area behind its translucent top bar with the `background-color` of the full-width fixed or sticky element at the top edge. It ignores `theme-color` and doesn't paint pseudo-elements there.
   - Keep the navbar opaque, with no `backdrop-filter`, spanning the full width.

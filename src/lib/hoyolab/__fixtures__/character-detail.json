@@ -1,0 +1,99 @@
+{
+  "retcode": 0,
+  "message": "OK",
+  "data": {
+    "list": [
+      {
+        "base": {
+          "id": 10000046,
+          "icon": "https://example.invalid/icons/hu-tao.png",
+          "name": "Hu Tao",
+          "element": "Pyro",
+          "fetter": 10,
+          "level": 90,
+          "rarity": 5,
+          "actived_constellation_num": 1,
+          "image": "https://example.invalid/images/hu-tao.png",
+          "is_chosen": true,
+          "side_icon": "https://example.invalid/side/hu-tao.png",
+          "weapon_type": 13
+        },
+        "weapon": {
+          "id": 13501,
+          "icon": "https://example.invalid/weapons/homa.png",
+          "type": 13,
+          "rarity": 5,
+          "level": 90,
+          "promote_level": 6,
+          "type_name": "Polearm",
+          "desc": "A firestaff once used in ritual.",
+          "affix_level": 1,
+          "name": "Staff of Homa",
+          "main_property": { "property_type": 2001, "base": "608", "add": "", "final": "608" },
+          "sub_property": { "property_type": 22, "base": "66.2%", "add": "", "final": "66.2%" }
+        },
+        "relics": [
+          {
+            "id": 81503,
+            "name": "Witch's Heart Flames",
+            "icon": "https://example.invalid/relics/cw-circlet.png",
+            "pos": 5,
+            "rarity": 5,
+            "level": 20,
+            "set": { "id": 15006, "name": "Crimson Witch of Flames" },
+            "pos_name": "Circlet of Logos",
+            "main_property": { "property_type": 22, "value": "62.2%", "times": 0 },
+            "sub_property_list": [
+              { "property_type": 20, "value": "10.5%", "times": 2 },
+              { "property_type": 2000, "value": "538", "times": 1 }
+            ]
+          },
+          {
+            "id": 81501,
+            "name": "Witch's Flower of Blaze",
+            "pos": 1,
+            "rarity": 5,
+            "level": 20,
+            "set": { "id": 15006, "name": "Crimson Witch of Flames" },
+            "pos_name": "Flower of Life",
+            "main_property": { "property_type": 2000, "value": "4,780", "times": 0 },
+            "sub_property_list": []
+          }
+        ],
+        "constellations": [
+          { "id": 462, "name": "Ominous Rainfall", "effect": "...", "is_actived": false, "pos": 2 },
+          { "id": 461, "name": "Crimson Bouquet", "effect": "...", "is_actived": true, "pos": 1 }
+        ],
+        "skills": [
+          { "skill_id": 10461, "skill_type": 1, "level": 10, "desc": "...", "icon": "", "is_unlock": true, "name": "Secret Spear of Wangsheng" },
+          { "skill_id": 10462, "skill_type": 1, "level": 13, "desc": "...", "icon": "", "is_unlock": true, "name": "Guide to Afterlife" },
+          { "skill_id": 10469, "skill_type": 2, "level": 1, "desc": "...", "icon": "", "is_unlock": true, "name": "Flutter By" }
+        ],
+        "base_properties": [
+          { "property_type": 2000, "base": "15,552", "add": "+20,213", "final": "35,765" }
+        ],
+        "selected_properties": [
+          { "property_type": 2000, "base": "15,552", "add": "+20,213", "final": "35,765" },
+          { "property_type": 20, "base": "5.0%", "add": "", "final": "70.4%" }
+        ],
+        "extra_properties": [],
+        "element_properties": [
+          { "property_type": 40, "base": "", "add": "", "final": "61.6%" }
+        ],
+        "costumes": [
+          { "id": 204601, "name": "Cherries Snow-Laden", "icon": "https://example.invalid/costumes/hu-tao.png" }
+        ]
+      }
+    ],
+    "property_map": {
+      "20": { "property_type": 20, "name": "CRIT Rate", "filter_name": "CRIT Rate" },
+      "22": { "property_type": 22, "name": "CRIT DMG", "filter_name": "CRIT DMG" },
+      "40": { "property_type": 40, "name": "Pyro DMG Bonus", "filter_name": "Pyro DMG Bonus" },
+      "2000": { "property_type": 2000, "name": "Max HP", "filter_name": "Max HP" },
+      "2001": { "property_type": 2001, "name": "ATK", "filter_name": "ATK" }
+    },
+    "avatar_wiki": { "10000046": "https://wiki.hoyolab.com/pc/genshin/entry/example-hu-tao" },
+    "weapon_wiki": { "13501": "https://wiki.hoyolab.com/pc/genshin/entry/example-homa" },
+    "relic_wiki": { "81503": "https://wiki.hoyolab.com/pc/genshin/entry/example-cw" }
+  }
+}

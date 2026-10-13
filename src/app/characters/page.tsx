@@ -14,7 +14,10 @@ export default async function CharactersPage() {
 
   const [characters, owned] = await Promise.all([
     db.character.findMany({ orderBy: { name: "asc" } }),
-    db.userCharacter.findMany({ where: { userId }, select: { characterId: true } }),
+    // Guests (no user) keep their roster in local storage; the grid reads it there.
+    userId
+      ? db.userCharacter.findMany({ where: { userId }, select: { characterId: true, createdAt: true } })
+      : null,
   ]);
 
   return (
@@ -22,7 +25,9 @@ export default async function CharactersPage() {
       <h1 className="sr-only">Characters</h1>
       <CharacterGrid
         characters={characters}
-        ownedIds={owned.map((o) => o.characterId)}
+        serverOwned={
+          owned?.map((o) => ({ id: o.characterId, addedAt: o.createdAt.toISOString() })) ?? null
+        }
       />
     </main>
   );

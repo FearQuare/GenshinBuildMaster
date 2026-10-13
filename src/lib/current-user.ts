@@ -1,7 +1,9 @@
-// Placeholder until accounts exist: every request acts as this single seeded user.
-// Replace getCurrentUserId with a real session lookup when auth is added.
-export const LOCAL_USER_ID = "local-user";
+import { getConnection } from "@/lib/hoyolab/session";
 
-export async function getCurrentUserId(): Promise<string> {
-  return LOCAL_USER_ID;
+// Users are HoYoLAB accounts: signing in means connecting one through Data Sync.
+// Returns null for guests, whose roster lives in the browser's local storage
+// (src/lib/guest-roster.ts). Pages and server actions get the user only from here.
+export async function getCurrentUserId(): Promise<string | null> {
+  const connection = await getConnection();
+  return connection?.userId ?? null;
 }

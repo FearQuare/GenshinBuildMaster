@@ -1,32 +1,22 @@
 "use client";
 
-import { useOptimistic, useState, useTransition } from "react";
-import { setOwned } from "./characters/actions";
+import type { OwnedEntry } from "@/lib/roster-file";
+import { useRoster } from "@/lib/use-roster";
 
 export function FeaturedToggle({
   characterId,
   name,
-  owned,
+  serverOwned,
 }: {
   characterId: string;
   name: string;
-  owned: boolean;
+  serverOwned: OwnedEntry[] | null;
 }) {
-  const [optimisticOwned, setOptimisticOwned] = useOptimistic(owned);
-  const [pending, startTransition] = useTransition();
-  const [error, setError] = useState(false);
+  const roster = useRoster(serverOwned);
+  const optimisticOwned = roster.owned.has(characterId);
 
   function toggle() {
-    const next = !optimisticOwned;
-    setError(false);
-    startTransition(async () => {
-      setOptimisticOwned(next);
-      try {
-        await setOwned(characterId, next);
-      } catch {
-        setError(true);
-      }
-    });
+    roster.setOwned(characterId, !optimisticOwned, name);
   }
 
   return (
@@ -35,7 +25,6 @@ export function FeaturedToggle({
         type="button"
         onClick={toggle}
         aria-pressed={optimisticOwned}
-        aria-busy={pending}
         className={`inline-flex h-11 items-center gap-2 whitespace-nowrap rounded-card border px-4 font-mono text-sm transition-colors duration-(--dur-micro) active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus ${
           optimisticOwned
             ? "border-accent bg-deep text-text-strong"
@@ -47,9 +36,9 @@ export function FeaturedToggle({
         </span>
         {optimisticOwned ? `${name} is in your roster` : `I own ${name}`}
       </button>
-      {error && (
+      {roster.error && (
         <p role="alert" className="font-mono text-xs text-text">
-          Couldn&rsquo;t save that. Check your connection and try again.
+          {roster.error}
         </p>
       )}
     </div>

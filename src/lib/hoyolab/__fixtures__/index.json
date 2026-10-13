@@ -1,0 +1,22 @@
+{
+  "retcode": 0,
+  "message": "OK",
+  "data": {
+    "role": {
+      "AvatarUrl": "https://example.invalid/hoyolab-avatar.png",
+      "nickname": "Traveler",
+      "region": "os_euro",
+      "level": 60,
+      "game_head_icon": "https://example.invalid/game-head-icon.png"
+    },
+    "avatars": [],
+    "stats": {
+      "active_day_number": 1500,
+      "achievement_number": 1234,
+      "avatar_number": 98,
+      "spiral_abyss": "12-3",
+      "role_combat": { "is_unlock": true, "max_round_id": 10, "has_data": true, "has_detail_data": true },
+      "hard_challenge": { "is_unlock": true, "difficulty": 5, "name": "Fearless", "has_data": true }
+    }
+  }
+}

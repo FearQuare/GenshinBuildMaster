@@ -158,10 +158,28 @@ body::after {
   animation-delay: calc(var(--i, 0) * 80ms);
 }
 .caret { animation: blink 1.05s steps(2) infinite; }
+
+/* Loading placeholder: a red band sweeps across. Size the element like what it replaces. */
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-panel-2);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 0 0 / 0.16), transparent);
+  animation: shimmer 1.3s var(--ease-in-out) infinite;
+}
 .jolt { animation: jolt var(--dur-short) var(--ease-out); }
 
 @media (prefers-reduced-motion: reduce) {
-  .glitch-red, .glitch-cyan, .glitch-slice, .caret, .jolt,
+  .glitch-red, .glitch-cyan, .glitch-slice, .caret, .jolt, .skeleton::after,
   .group:hover .glitch-red, .group:hover .glitch-cyan, .group:hover .glitch-slice {
     animation: none !important;
   }

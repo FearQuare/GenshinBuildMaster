@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-10-13",
+    "scope": "component",
+    "macrostructure": "Catalogue (characters) + Split Studio (landing), unchanged",
+    "theme": "DESIGN.md (Glitch UI Dystopian Terminal)",
+    "genre": "atmospheric",
+    "enrichment": "Data Sync panel: terminal header, skeleton shimmer scan, glitch-ring avatar",
+    "nav": "N8 terminal + Data Sync button / avatar menu (right)",
+    "footer": "Ft4 dense colophon",
+    "brief": "Genshin Build Master \u00b7 HoYoLAB sign-in (Data Sync), profile card, guest mode JSON export/import"
+  },
+  {
     "date": "2026-10-03",
     "scope": "app",
     "macrostructure": "Split Studio (landing) + Catalogue (characters)",

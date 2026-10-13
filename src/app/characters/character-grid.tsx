@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useOptimistic, useState, useTransition } from "react";
+import { useMemo, useState } from "react";
 import type { Character } from "@/generated/prisma/client";
 import { Element, WeaponType } from "@/generated/prisma/enums";
 import { characterIconSrc } from "@/lib/character-icon";
-import { setOwned } from "./actions";
+import type { OwnedEntry } from "@/lib/roster-file";
+import { useRoster } from "@/lib/use-roster";
+import { RosterFileTools } from "./roster-file-tools";
 
 type Ownership = "all" | "owned" | "missing";
 
@@ -32,41 +34,23 @@ function titleCase(value: string) {
   return value.charAt(0) + value.slice(1).toLowerCase();
 }
 
+// `serverOwned` is the signed-in user's roster, or null for a guest (local storage).
 export function CharacterGrid({
   characters,
-  ownedIds,
+  serverOwned,
 }: {
   characters: Character[];
-  ownedIds: string[];
+  serverOwned: OwnedEntry[] | null;
 }) {
   const [query, setQuery] = useState("");
   const [element, setElement] = useState<Element | null>(null);
   const [weapon, setWeapon] = useState<WeaponType | null>(null);
   const [ownership, setOwnership] = useState<Ownership>("all");
-  const [error, setError] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
-
-  const [owned, toggleOptimistic] = useOptimistic(
-    new Set(ownedIds),
-    (current, { id, value }: { id: string; value: boolean }) => {
-      const next = new Set(current);
-      if (value) next.add(id);
-      else next.delete(id);
-      return next;
-    },
-  );
+  const roster = useRoster(serverOwned);
+  const { owned, error } = roster;
 
   function toggle(character: Character) {
-    const value = !owned.has(character.id);
-    setError(null);
-    startTransition(async () => {
-      toggleOptimistic({ id: character.id, value });
-      try {
-        await setOwned(character.id, value);
-      } catch {
-        setError(`Couldn't update ${character.name}. Check your connection and try again.`);
-      }
-    });
+    roster.setOwned(character.id, !owned.has(character.id), character.name);
   }
 
   const filtersActive = query !== "" || element !== null || weapon !== null || ownership !== "all";
@@ -99,7 +83,7 @@ export function CharacterGrid({
         className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
       >
         <p className="font-mono tabular-nums" aria-live="polite">
-          <span className="text-5xl text-text-strong sm:text-6xl">{owned.size}</span>
+          <span className="text-5xl text-text-strong sm:text-6xl">{roster.ready ? owned.size : "··"}</span>
           <span className="text-lg text-muted"> / {characters.length} owned</span>
         </p>
         <div className="flex w-full flex-col gap-2 sm:w-72">
@@ -120,6 +104,8 @@ export function CharacterGrid({
           </div>
         </div>
       </section>
+
+      <RosterFileTools roster={roster} characters={characters} />
 
       <section
         aria-label="Filters"

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { GenshinAccount } from "@/lib/hoyolab/types";
+import { DataSync } from "./data-sync";
 
 // Add new sections here as they ship.
 const LINKS = [
@@ -9,7 +11,8 @@ const LINKS = [
   { href: "/characters", label: "Characters" },
 ] as const;
 
-export function SiteNav() {
+// `account` is the signed-in HoYoLAB account (from the root layout), or null for guests.
+export function SiteNav({ account }: { account: GenshinAccount | null }) {
   const pathname = usePathname();
 
   return (
@@ -19,7 +22,7 @@ export function SiteNav() {
     <header className="sticky top-0 z-(--z-sticky) border-b border-line bg-bg pt-[env(safe-area-inset-top)]">
       <nav
         aria-label="Main"
-        className="mx-auto flex h-14 w-full max-w-7xl items-center gap-6 px-4 sm:px-6"
+        className="relative mx-auto flex h-14 w-full max-w-7xl items-center gap-3 px-4 sm:gap-6 sm:px-6"
       >
         <Link
           href="/"
@@ -30,7 +33,7 @@ export function SiteNav() {
           <span className="sr-only">Genshin Build Master, home</span>
         </Link>
 
-        <ul className="flex items-center gap-1 sm:gap-2">
+        <ul className="flex items-center sm:gap-2">
           {LINKS.map(({ href, label }) => {
             const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
             return (
@@ -38,14 +41,14 @@ export function SiteNav() {
                 <Link
                   href={href}
                   aria-current={active ? "page" : undefined}
-                  className={`relative flex h-14 items-center whitespace-nowrap px-3 text-base transition-colors duration-(--dur-micro) focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-focus ${
+                  className={`relative flex h-14 items-center whitespace-nowrap px-2 text-base sm:px-3 transition-colors duration-(--dur-micro) focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-focus ${
                     active ? "text-text-strong" : "text-muted hover:text-text"
                   }`}
                 >
                   {label}
                   <span
                     aria-hidden
-                    className={`absolute inset-x-3 bottom-0 h-0.5 bg-accent transition-transform duration-(--dur-short) ease-out ${
+                    className={`absolute inset-x-2 bottom-0 h-0.5 sm:inset-x-3 bg-accent transition-transform duration-(--dur-short) ease-out ${
                       active ? "scale-x-100" : "scale-x-0"
                     }`}
                   />
@@ -55,7 +58,7 @@ export function SiteNav() {
           })}
         </ul>
 
-        <span aria-hidden className="caret ml-auto font-mono text-accent">▮</span>
+        <DataSync account={account} />
       </nav>
     </header>
   );

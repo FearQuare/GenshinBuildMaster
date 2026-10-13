@@ -1,10 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { connection } from "next/server";
-import { characterIconSrc } from "@/lib/character-icon";
 import { getCurrentUserId } from "@/lib/current-user";
 import { db } from "@/lib/db";
 import { FeaturedToggle } from "./featured-toggle";
+import { RosterProgress } from "./roster-progress";
 import { SandronePortrait } from "./sandrone-portrait";
 
 const FEATURED_ID = "sandrone";
@@ -37,18 +36,16 @@ export default async function Home() {
   await connection();
   const userId = await getCurrentUserId();
 
-  const [featured, total, owned] = await Promise.all([
+  const [featured, characters, owned] = await Promise.all([
     db.character.findUnique({ where: { id: FEATURED_ID } }),
-    db.character.count(),
-    db.userCharacter.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      select: { character: { select: { id: true, name: true, rarity: true } } },
-    }),
+    db.character.findMany({ select: { id: true, name: true, rarity: true } }),
+    // Guests (no user) keep their roster in local storage; the client reads it there.
+    userId
+      ? db.userCharacter.findMany({ where: { userId }, select: { characterId: true, createdAt: true } })
+      : null,
   ]);
-  const featuredOwned = owned.some((o) => o.character.id === FEATURED_ID);
-  const recent = owned.slice(0, 14).map((o) => o.character);
-  const progress = total ? owned.length / total : 0;
+  const serverOwned =
+    owned?.map((o) => ({ id: o.characterId, addedAt: o.createdAt.toISOString() })) ?? null;
 
   return (
     <main>
@@ -99,7 +96,7 @@ export default async function Home() {
                   <span className="text-cryo">{featured.element}</span> {featured.weaponType}, new in 6.7
                 </dd>
               </dl>
-              <FeaturedToggle characterId={featured.id} name={featured.name} owned={featuredOwned} />
+              <FeaturedToggle characterId={featured.id} name={featured.name} serverOwned={serverOwned} />
             </div>
           )}
         </div>
@@ -136,40 +133,7 @@ export default async function Home() {
           </ul>
         </div>
 
-        <div className="flex flex-col gap-6 rounded-card border border-line bg-panel p-6 sm:p-8">
-          <h2 className="text-3xl text-text-strong sm:text-4xl">Your progress</h2>
-          <p className="font-mono tabular-nums">
-            <span className="text-6xl text-text-strong">{owned.length}</span>
-            <span className="text-xl text-muted"> / {total} characters</span>
-          </p>
-          <div className="h-1.5 overflow-hidden bg-deep">
-            <div className="h-full origin-left bg-accent" style={{ transform: `scaleX(${progress})` }} />
-          </div>
-
-          {recent.length > 0 ? (
-            <ul className="grid grid-cols-[repeat(auto-fill,minmax(2.75rem,1fr))] gap-2" aria-label="Recently added characters">
-              {recent.map((c) => (
-                <li
-                  key={c.id}
-                  className={`aspect-square overflow-hidden rounded-[6px] ${c.rarity === 5 ? "bg-rarity-5-tile" : "bg-rarity-4-tile"}`}
-                >
-                  <Image src={characterIconSrc(c.id)} alt={c.name} title={c.name} width={56} height={56} className="size-full" />
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-text">
-              Nothing synced yet. Mark the characters you own and they&rsquo;ll show up here.
-            </p>
-          )}
-
-          <Link
-            href="/characters"
-            className="mt-auto inline-flex h-11 w-fit items-center whitespace-nowrap rounded-card border-[1.5px] border-accent px-4 text-text-strong transition-colors duration-(--dur-micro) hover:bg-deep active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-          >
-            {owned.length > 0 ? "Update your roster" : "Start your roster"}
-          </Link>
-        </div>
+        <RosterProgress characters={characters} serverOwned={serverOwned} />
       </section>
     </main>
   );

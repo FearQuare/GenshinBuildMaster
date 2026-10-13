@@ -1,0 +1,55 @@
+{
+  "retcode": 0,
+  "message": "OK",
+  "data": {
+    "list": [
+      {
+        "id": 10000046,
+        "icon": "https://example.invalid/icons/hu-tao.png",
+        "name": "Hu Tao",
+        "element": "Pyro",
+        "fetter": 10,
+        "level": 90,
+        "rarity": 5,
+        "actived_constellation_num": 1,
+        "image": "https://example.invalid/images/hu-tao.png",
+        "is_chosen": true,
+        "side_icon": "https://example.invalid/side/hu-tao.png",
+        "weapon_type": 13,
+        "weapon": {
+          "id": 13501,
+          "icon": "https://example.invalid/weapons/homa.png",
+          "type": 13,
+          "rarity": 5,
+          "level": 90,
+          "affix_level": 1,
+          "name": "Staff of Homa"
+        }
+      },
+      {
+        "id": 10000032,
+        "name": "Bennett",
+        "element": "Pyro",
+        "fetter": 10,
+        "level": 80,
+        "rarity": 4,
+        "actived_constellation_num": 6,
+        "weapon_type": 1,
+        "weapon": {
+          "id": 11401,
+          "type": 1,
+          "rarity": 4,
+          "level": 90,
+          "affix_level": 5,
+          "name": "Favonius Sword"
+        }
+      },
+      {
+        "id": 10000999,
+        "name": "Future Character",
+        "element": "None",
+        "weapon_type": 99
+      }
+    ]
+  }
+}

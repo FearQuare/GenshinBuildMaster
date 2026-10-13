@@ -35,10 +35,21 @@ model Character {
   owners     UserCharacter[]
 }
 
+// A person using the app, identified by their HoYoLAB account (signed in via Data Sync).
+// Guests have no row: their roster lives in the browser's local storage.
 model User {
-  id         String          @id @default(cuid())
-  name       String
-  characters UserCharacter[]
+  id              String           @id @default(cuid())
+  hoyolabUid      String           @unique
+  name            String
+  avatarUrl       String?
+  characters      UserCharacter[]
+  hoyolabSessions HoyolabSession[]
+}
+
+// App-wide key/value settings, e.g. the HoYoLAB device id sent as x-rpc-device_id.
+model AppSetting {
+  key   String @id
+  value String
 }
 
 // A character a user owns. Per-user progress (level, constellation, talents) goes here later.
@@ -50,4 +61,25 @@ model UserCharacter {
   character   Character @relation(fields: [characterId], references: [id])
 
   @@id([userId, characterId])
+}
+
+// A "Remember me" HoYoLAB connection. Session-only connections stay in server memory
+// and never reach the database. id is the SHA-256 of the session cookie value, and
+// the ltoken is AES-256-GCM encrypted (src/lib/hoyolab/session.ts).
+model HoyolabSession {
+  id              String   @id
+  userId          String
+  ltuid           String
+  ltokenEncrypted String
+  hoyolabUid      String
+  roleId          String
+  server          String
+  nickname        String
+  level           Int
+  avatarUrl       String
+  createdAt       DateTime @default(now())
+  expiresAt       DateTime
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
