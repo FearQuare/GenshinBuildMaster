@@ -1,6 +1,6 @@
 # Genshin Build Master
 
-Track the Genshin Impact characters you own. Sync them straight from HoYoLAB, or tick them by hand without an account. Build and team recommendations for Spiral Abyss, Imaginarium Theater and Stygian Onslaught are planned.
+Track the Genshin Impact characters you own and see how each one is built. Sync them straight from HoYoLAB, or tick them by hand without an account. Build and team recommendations for Spiral Abyss, Imaginarium Theater and Stygian Onslaught are planned.
 
 ![Home page with Sandrone and the Data Sync button](docs/screenshots/home.png)
 
@@ -58,13 +58,31 @@ Once you're signed in, the Data Sync button turns into your profile picture. Cli
 
 ![Account menu with Sync characters and Sign Out](docs/screenshots/account-menu.png)
 
+### Inspect a character's build (Character Details)
+
+Once you're signed in, **Character Details** lists your characters in a sidebar. Search it, or on a phone swipe through it. Pick one to see how they're built right now, read from your Battle Chronicle:
+
+- **Overview**: splash art, level, constellation and friendship, talent levels, and which constellations are unlocked.
+- **Weapon**: refinement, level, and its main stat and substat.
+- **Stats**: the totals with your weapon and artifacts on (HP, ATK, DEF, Elemental Mastery, crit, Energy Recharge, elemental damage), each split into base and bonus.
+- **Artifacts**: every piece with its main stat and substats. Dots show how many upgrades went into each substat. Active set bonuses are listed, plus a crit value score (CV = 2 × CRIT Rate + CRIT DMG, from substats).
+
+![Character Details with Hu Tao's build](docs/screenshots/character-details.png)
+
+### Share your build as an image
+
+Click **Download PNG** to save the build as a 1600×900 card, ready to post or send to friends.
+
+![Downloaded build card for Hu Tao](docs/screenshots/build-card.png)
+
 ### Works on your phone
 
 Every page is built for small screens too, down to 320px wide.
 
 <p>
-  <img src="docs/screenshots/mobile-roster.png" alt="Roster on a phone, in guest mode" width="300">
-  <img src="docs/screenshots/mobile-profile.png" alt="Data Sync profile card on a phone" width="300">
+  <img src="docs/screenshots/mobile-roster.png" alt="Roster on a phone, in guest mode" width="260">
+  <img src="docs/screenshots/mobile-profile.png" alt="Data Sync profile card on a phone" width="260">
+  <img src="docs/screenshots/mobile-character-details.png" alt="Character Details on a phone" width="260">
 </p>
 
 ## Your HoYoLAB login and privacy
@@ -100,4 +118,4 @@ Run the tests with `npm test`.
 
 ---
 
-Genshin Build Master is a fan-made tool and isn't affiliated with HoYoverse. Character art and names belong to HoYoverse; icons are sourced from Project Amber. Screenshots use demo data.
+Genshin Build Master is a fan-made tool and isn't affiliated with HoYoverse. Character art and names belong to HoYoverse; icons are sourced from Project Amber. Screenshots use demo data, with game art from Project Amber.
